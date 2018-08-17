@@ -40,3 +40,46 @@ const (
 
 	EOF
 )
+
+func (day TokenType) String() string {
+	names := [...]string{
+		"WHEN",
+		"THEN",
+		"CASE",
+		"METADATA",
+		"SUBJECT",
+		"DEFINITIONS",
+		"ALIAS",
+		"RULES",
+		"EXPOSE",
+
+		"IS",
+		"IS_NOT",
+		"IS_IN",
+		"IS_NOT_IN",
+
+		"AND",
+		"OR",
+
+		"EQUAL",
+		"NOT_EQUAL",
+		"LEFT_PARENTHESIS",
+		"RIGHT_PARENTHESIS",
+		"COMMA",
+		"DOUBLE_QUOTE",
+		"LESS",
+		"GREATER",
+		"LESS_EQUAL",
+		"GREATER_EQUAL",
+		"COLUMN",
+		"STRING",
+		"SHARP",
+		"INDENT",
+		"IDENTIFIER",
+		"NUMBER",
+
+		"EOF",
+	}
+
+	return names[day]
+}

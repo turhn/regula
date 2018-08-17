@@ -68,21 +68,17 @@ func (l *Lexer) scanToken() {
 	case '=':
 		l.addEmptyToken(EQUAL)
 	case '<':
-		var tokenType TokenType
 		if l.match('=') {
-			tokenType = LESS_EQUAL
+			l.addEmptyToken(LESS_EQUAL)
 		} else {
-			tokenType = LESS
+			l.addEmptyToken(LESS)
 		}
-		l.addEmptyToken(tokenType)
 	case '>':
-		var tokenType TokenType
 		if l.match('=') {
-			tokenType = GREATER_EQUAL
+			l.addEmptyToken(GREATER_EQUAL)
 		} else {
-			tokenType = GREATER
+			l.addEmptyToken(GREATER)
 		}
-		l.addEmptyToken(tokenType)
 	case '"':
 		l.scanString()
 	case '#':
