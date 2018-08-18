@@ -5,19 +5,22 @@ import (
 	"os"
 
 	"../ast"
+	"../lexer"
 	"../token"
 )
 
 type Parser struct {
+	lexer          *lexer.Lexer
 	tokens         []token.Token
 	reservedBlocks []token.TokenType
 	current        int
 	level          int
 }
 
-func New(tokens []token.Token) *Parser {
+func New(lexer *lexer.Lexer) *Parser {
 	return &Parser{
-		tokens:  tokens,
+		lexer:   lexer,
+		tokens:  lexer.Scan(),
 		current: 0,
 		level:   0,
 		reservedBlocks: []token.TokenType{
@@ -98,11 +101,11 @@ func (parser *Parser) parseRuleResult() *ast.RuleResult {
 	result = append(result, parser.parseKeyValuePair())
 	parser.level--
 
-	return &ast.RuleResult{result}
+	return &ast.RuleResult{Items: result}
 }
 
 func (parser *Parser) consumeIndents() {
-	for i := 1; i < parser.level; i++ {
+	for i := 1; i <= parser.level; i++ {
 		parser.consume(token.INDENT, fmt.Sprintf("Expected indent level %d", parser.level))
 	}
 }
@@ -129,6 +132,14 @@ func (parser *Parser) parseKeyValuePair() *ast.KeyValuePair {
 func (parser *Parser) parseIdentifier() *ast.Identifier {
 	parser.consume(token.IDENTIFIER, "Identifier expected")
 	return &ast.Identifier{Value: parser.previous().Lexeme}
+}
+
+func (parser *Parser) parseCompoundIdentifier() *ast.CompoundIdentifier {
+	var identifiers []*ast.Identifier
+	for parser.check(token.IDENTIFIER) {
+		identifiers = append(identifiers, parser.parseIdentifier())
+	}
+	return &ast.CompoundIdentifier{Value: identifiers}
 }
 
 func (parser *Parser) parseExpression() ast.Expression {
@@ -179,7 +190,14 @@ func (parser *Parser) parsePrimaryExpression() ast.Expression {
 		return ast.NewNumberLiteral(parser.consume(current.Type, ""))
 	case token.STRING:
 		return ast.NewStringLiteral(parser.consume(current.Type, ""))
+	case token.IDENTIFIER:
+		if parser.peekNext().Type == token.IDENTIFIER {
+			return parser.parseCompoundIdentifier()
+		}
+		return parser.parseIdentifier()
 	}
+
+	parser.parserError(current, "Unknown Expression")
 
 	return nil
 }
@@ -200,8 +218,7 @@ func (parser *Parser) consume(tokenType token.TokenType, message string) token.T
 		return parser.advance()
 	}
 	current := parser.peek()
-	fmt.Printf("Parser Error [%d:%d]: %s\n", current.Line, current.Column, message)
-	os.Exit(1)
+	parser.parserError(current, message)
 	return token.Token{}
 }
 
@@ -227,6 +244,10 @@ func (parser *Parser) previous() token.Token {
 
 func (parser *Parser) peek() token.Token {
 	return parser.tokens[parser.current]
+}
+
+func (parser *Parser) peekNext() token.Token {
+	return parser.tokens[parser.current+1]
 }
 
 func (parser *Parser) isAtEnd() bool {

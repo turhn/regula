@@ -10,7 +10,7 @@ import "../token"
 
 // Lexer struct
 type Lexer struct {
-	source   string
+	Source   string
 	start    int
 	current  int
 	column   int
@@ -22,7 +22,7 @@ type Lexer struct {
 // New Lexer
 func New(source string) *Lexer {
 	return &Lexer{
-		source:  source,
+		Source:  source,
 		start:   0,
 		current: 0,
 		column:  0,
@@ -169,7 +169,7 @@ func (l *Lexer) scanNumber() {
 		}
 	}
 
-	l.addToken(token.NUMBER, l.source[l.start:l.current])
+	l.addToken(token.NUMBER, l.Source[l.start:l.current])
 }
 
 func (l *Lexer) isDigit(char rune) bool {
@@ -178,17 +178,17 @@ func (l *Lexer) isDigit(char rune) bool {
 
 func (l *Lexer) peekNext() rune {
 	currentNext := l.current + 1
-	if currentNext >= len(l.source) {
+	if currentNext >= len(l.Source) {
 		return ' '
 	}
-	return rune(l.source[currentNext])
+	return rune(l.Source[currentNext])
 }
 
 func (l *Lexer) peek() rune {
-	if l.current >= len(l.source) {
+	if l.current >= len(l.Source) {
 		return rune(' ')
 	}
-	return rune(l.source[l.current])
+	return rune(l.Source[l.current])
 }
 
 func (l *Lexer) scanString() {
@@ -209,7 +209,7 @@ func (l *Lexer) scanString() {
 
 	l.advance()
 
-	literal := l.source[l.start+1 : l.current-1]
+	literal := l.Source[l.start+1 : l.current-1]
 	l.addToken(token.STRING, literal)
 }
 
@@ -218,7 +218,7 @@ func (l *Lexer) match(expected rune) bool {
 		return false
 	}
 
-	if rune(l.source[l.current]) != expected {
+	if rune(l.Source[l.current]) != expected {
 		return false
 	}
 
@@ -229,7 +229,7 @@ func (l *Lexer) match(expected rune) bool {
 }
 
 func (l *Lexer) getCurrent() string {
-	return l.source[l.start:l.current]
+	return l.Source[l.start:l.current]
 }
 
 func (l *Lexer) addToken(tokenType token.TokenType, literal string) {
@@ -245,9 +245,9 @@ func (l *Lexer) addEmptyToken(tokenType token.TokenType) {
 func (l *Lexer) advance() rune {
 	l.current++
 	l.column++
-	return rune(l.source[l.current-1])
+	return rune(l.Source[l.current-1])
 }
 
 func (l *Lexer) isAtEnd() bool {
-	return l.current >= len(l.source)
+	return l.current >= len(l.Source)
 }

@@ -74,8 +74,35 @@ type Identifier struct {
 }
 
 func (identifier *Identifier) String() string {
-	return identifier.Token.Literal
+	return identifier.Value
 }
+
+func (identifier *Identifier) TokenLiteral() string {
+	return identifier.Value
+}
+
+func (identifier *Identifier) expressionNode() {}
+
+type CompoundIdentifier struct {
+	*BaseNode
+	Value []*Identifier
+}
+
+func (compoundIdentifier *CompoundIdentifier) String() string {
+	var identifiers = ""
+
+	for _, identifier := range compoundIdentifier.Value {
+		identifiers += " " + identifier.String()
+	}
+
+	return identifiers
+}
+
+func (compoundIdentifier *CompoundIdentifier) TokenLiteral() string {
+	return compoundIdentifier.String()
+}
+
+func (compoundIdentifier *CompoundIdentifier) expressionNode() {}
 
 type BinaryExpression struct {
 	*BaseNode

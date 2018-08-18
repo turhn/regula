@@ -19,7 +19,7 @@ When
 `
 
 	lexer := lexer.New(source)
-	parser := New(lexer.Scan())
+	parser := New(lexer)
 
 	result := parser.Parse().Metadata
 
