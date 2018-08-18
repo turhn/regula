@@ -56,8 +56,8 @@ func (parser *Parser) Parse() *ast.Program {
 	}
 
 	return &ast.Program{
-		Metadata:   metadataBlock,
-		RulesBlock: rulesBlock,
+		Metadata: metadataBlock,
+		Rules:    rulesBlock,
 	}
 }
 
