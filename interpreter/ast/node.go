@@ -17,7 +17,6 @@ type Statement interface {
 type Expression interface {
 	node
 	visitable
-	IsPrimitive() bool
 	NativeValue() interface{}
 }
 

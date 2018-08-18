@@ -6,21 +6,16 @@ import (
 	"../token"
 )
 
-type notPrimitive struct{}
-
-func (np *notPrimitive) IsPrimitive() bool {
-	return false
-}
-
+// BinaryExpression ...
 type BinaryExpression struct {
 	*BaseNode
 	visitable
-	notPrimitive
 	Left     Expression
 	Operator *Operator
 	Right    Expression
 }
 
+// NativeValue ...
 func (be *BinaryExpression) NativeValue() interface{} {
 	return nil
 }
@@ -44,7 +39,6 @@ func NewLogicalExpression(token token.Token, leftHand Expression, operator *Oper
 
 // ComparisonExpression ...
 type ComparisonExpression struct {
-	notPrimitive
 	*BinaryExpression
 }
 

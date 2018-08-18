@@ -90,6 +90,7 @@ func (i *Identifier) String() string {
 
 // CompoundIdentifier is a special identifier with multiple words
 type CompoundIdentifier struct {
+	Expression
 	*BaseNode
 	Value []*Identifier
 }
