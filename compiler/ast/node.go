@@ -8,16 +8,20 @@ type node interface {
 	IsStatement() bool
 }
 
+// Statement is the interface for all the statements
 type Statement interface {
 	node
 	statementNode()
 }
 
+// Expression is the interface for all the expressions
 type Expression interface {
 	node
 	expressionNode()
 }
 
+// Program is the primary AST node
 type Program struct {
-	Metadata KeyValueBlock
+	Metadata   *KeyValueBlock
+	RulesBlock *RulesBlock
 }

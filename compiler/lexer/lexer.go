@@ -94,6 +94,8 @@ func (l *Lexer) scanToken() {
 	case '\r':
 	case '\t':
 	case '\n':
+		l.column = 0
+		l.line++
 	default:
 		if l.isDigit(rune(c)) {
 			l.scanNumber()

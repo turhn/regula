@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"testing"
+
 	"../lexer"
 )
 
@@ -22,7 +23,7 @@ When
 
 	result := parser.Parse().Metadata
 
-	if (result.Name() != "Metadata") {
+	if result.Name != "Metadata" {
 		t.Error("Metadata block does not a have correct name")
 	}
 
@@ -30,7 +31,7 @@ When
 	key := firstPair.Key
 	value := firstPair.Value
 
-	if key != "version" {
+	if key.String() != "version" {
 		t.Errorf("Expected 'version' got %v", key)
 	}
 
