@@ -5,29 +5,26 @@ import (
 	"os"
 )
 
-type Scope interface {
-	Define()
-	Resolve()
+// SymbolTable keeps track of the symbol table
+type SymbolTable struct {
+	Symbols map[string]interface{}
 }
 
-type LocalTable struct {
-	Scope
-	Symbols map[string]*interface{}
-}
-
-func (localTable *LocalTable) Define(name string, value interface{}) {
-	if _, ok := localTable.Symbols[name]; ok {
-		fmt.Printf("Already defined symbol: %s", name)
+// Define adds a new symbol to the symbal table
+func (table *SymbolTable) Define(name string, value interface{}) {
+	if _, ok := table.Symbols[name]; ok {
+		fmt.Printf("Already defined symbol: %s\n", name)
 		os.Exit(1)
 	}
 }
 
-func (localTable *LocalTable) Resolve(name string) interface{} {
-	if val, ok := localTable.Symbols[name]; ok {
+// Resolve resolves the symbol from the table or fails
+func (table *SymbolTable) Resolve(name string) interface{} {
+	if val, ok := table.Symbols[name]; ok {
 		return val
 	}
 
-	fmt.Printf("Unknown symbol: %s", name)
+	fmt.Printf("Unknown symbol: %s\n", name)
 	os.Exit(1)
 
 	return nil

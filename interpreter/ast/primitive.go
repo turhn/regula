@@ -15,8 +15,8 @@ type StringLiteral struct {
 	Value string
 }
 
-func (sl *StringLiteral) IsPrimitive() bool {
-	return true
+func (sl *StringLiteral) NativeValue() interface{} {
+	return sl.Value
 }
 
 func (sl *StringLiteral) Accept(visitor Visitor) Expression {
