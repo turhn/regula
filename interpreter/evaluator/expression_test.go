@@ -1,6 +1,7 @@
 package evaluator
 
 import (
+	"strings"
 	"testing"
 
 	"../ast"
@@ -57,7 +58,7 @@ func TestEvaluatingIdentifierExpression(t *testing.T) {
 	symbolTable := &local.SymbolTable{
 		Symbols: symbols,
 	}
-	evaluator := New(symbolTable)
+	evaluator := NewEvaluator(symbolTable)
 
 	table := []struct {
 		name     string
@@ -78,6 +79,44 @@ func TestEvaluatingIdentifierExpression(t *testing.T) {
 			t.Errorf("Expected %v, got %v", test.expected, result.NativeValue())
 		}
 	}
+}
+
+func TestEvaluatingCompoundIdentifierExpression(t *testing.T) {
+	symbols := make(map[string]interface{})
+	symbols["last year salary"] = &ast.NumberLiteral{Value: 40000.00}
+	symbols["two keys"] = &ast.NumberLiteral{Value: 2000.00}
+
+	symbolTable := &local.SymbolTable{Symbols: symbols}
+	evaluator := NewEvaluator(symbolTable)
+
+	table := []struct {
+		name     string
+		expected float64
+	}{
+		{name: "last year salary", expected: 40000.00},
+		{name: "two keys", expected: 2000.00},
+	}
+
+	for _, test := range table {
+		expression := compoundIdentifier(test.name)
+
+		result := evaluator.Visit(expression)
+
+		if result.NativeValue() != test.expected {
+			t.Errorf("Expected %v, got %v", test.expected, result.NativeValue())
+		}
+	}
+}
+
+func compoundIdentifier(keys string) *ast.CompoundIdentifier {
+	var identifiers []*ast.Identifier
+	keyArray := strings.Split(keys, " ")
+
+	for _, key := range keyArray {
+		identifiers = append(identifiers, &ast.Identifier{Value: key})
+	}
+
+	return &ast.CompoundIdentifier{Value: identifiers}
 }
 
 func comparisonExpression(left float64, operator token.TokenType, right float64) *ast.ComparisonExpression {

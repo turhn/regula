@@ -2,7 +2,6 @@ package local
 
 import (
 	"fmt"
-	"os"
 )
 
 // SymbolTable keeps track of the symbol table
@@ -12,10 +11,10 @@ type SymbolTable struct {
 
 // Define adds a new symbol to the symbal table
 func (table *SymbolTable) Define(name string, value interface{}) {
-	if _, ok := table.Symbols[name]; ok {
-		fmt.Printf("Already defined symbol: %s\n", name)
-		os.Exit(1)
+	if table.Symbols == nil {
+		table.Symbols = make(map[string]interface{}, 0)
 	}
+	table.Symbols[name] = value
 }
 
 // Resolve resolves the symbol from the table or fails
@@ -24,8 +23,5 @@ func (table *SymbolTable) Resolve(name string) interface{} {
 		return val
 	}
 
-	fmt.Printf("Unknown symbol: %s\n", name)
-	os.Exit(1)
-
-	return nil
+	panic(fmt.Sprintf("Unresolved symbol %s", name))
 }

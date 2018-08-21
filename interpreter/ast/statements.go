@@ -25,6 +25,7 @@ type RulesBlock struct {
 	Rules []*Rule
 }
 
+// Rule ...
 type Rule struct {
 	Statement
 	RuleExpression Expression
@@ -32,6 +33,7 @@ type Rule struct {
 	Result         *RuleResult
 }
 
+// RuleResult ...
 type RuleResult struct {
 	Items []*KeyValuePair
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"../token"
 )
@@ -88,6 +89,10 @@ func (i *Identifier) String() string {
 	return i.Value
 }
 
+func (i *Identifier) Accept(visitor Visitor) Expression {
+	return visitor.Visit(i)
+}
+
 // CompoundIdentifier is a special identifier with multiple words
 type CompoundIdentifier struct {
 	Expression
@@ -102,5 +107,5 @@ func (compoundIdentifier *CompoundIdentifier) String() string {
 		identifiers += " " + identifier.String()
 	}
 
-	return identifiers
+	return strings.TrimSpace(identifiers)
 }
