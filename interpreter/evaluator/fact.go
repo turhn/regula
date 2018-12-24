@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"../ast"
-	"../local"
+	"github.com/turhn/regula/interpreter/ast"
+	"github.com/turhn/regula/interpreter/local"
 )
 
 // RegisterFact parses the given fact and registers into the symbol table

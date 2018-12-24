@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"../ast"
-	"../local"
-	"../token"
+	"github.com/turhn/regula/interpreter/ast"
+	"github.com/turhn/regula/interpreter/local"
+	"github.com/turhn/regula/interpreter/token"
 )
 
 func TestEvaluatingNumberLiteralExpression(t *testing.T) {

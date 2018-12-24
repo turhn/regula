@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"../ast"
-	"../evaluator"
-	"../lexer"
-	"../local"
-	"../parser"
+	"github.com/turhn/regula/interpreter/ast"
+	"github.com/turhn/regula/interpreter/evaluator"
+	"github.com/turhn/regula/interpreter/lexer"
+	"github.com/turhn/regula/interpreter/local"
+	"github.com/turhn/regula/interpreter/parser"
 )
 
 // Runner is program runner

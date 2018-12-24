@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"../token"
+	"github.com/turhn/regula/interpreter/token"
 )
 
 // BaseNode for all AST

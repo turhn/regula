@@ -2,11 +2,14 @@ package lexer
 
 import (
 	"fmt"
+	"go/token"
 	"os"
 	"unicode"
+
+	"github.com/turhn/regula/interpreter/token"
 )
 
-import "../token"
+
 
 // Lexer struct
 type Lexer struct {

@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"../token"
+	"github.com/turhn/regula/interpreter/token"
 )
 
 // StringLiteral is the AST node for ""

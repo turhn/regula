@@ -1,6 +1,6 @@
 package ast
 
-import "../token"
+import "github.com/turhn/regula/interpreter/token"
 
 // Operator node ...
 type Operator struct {

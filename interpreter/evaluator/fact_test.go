@@ -3,8 +3,8 @@ package evaluator
 import (
 	"testing"
 
-	"../ast"
-	"../local"
+	"github.com/turhn/regula/interpreter/ast"
+	"github.com/turhn/regula/interpreter/local"
 )
 
 func TestFactEvaluatorRegistersFacts(t *testing.T) {

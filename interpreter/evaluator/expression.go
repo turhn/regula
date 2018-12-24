@@ -3,9 +3,9 @@ package evaluator
 import (
 	"fmt"
 
-	"../ast"
-	"../local"
-	"../token"
+	"github.com/turhn/regula/interpreter/ast"
+	"github.com/turhn/regula/interpreter/local"
+	"github.com/turhn/regula/interpreter/token"
 )
 
 // Evaluator evaluates the expressions

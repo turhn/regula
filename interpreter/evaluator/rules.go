@@ -1,7 +1,9 @@
 package evaluator
 
-import "../ast"
-import "../local"
+import (
+	"github.com/turhn/regula/interpreter/ast"
+	"github.com/turhn/regula/interpreter/local"
+)
 
 // RulesBlock the Evaluator object for the rules
 type RulesBlock struct {

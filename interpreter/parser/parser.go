@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"../ast"
-	"../lexer"
-	"../token"
+	"github.com/turhn/regula/interpreter/ast"
+	"github.com/turhn/regula/interpreter/lexer"
+	"github.com/turhn/regula/interpreter/token"
 )
 
 type Parser struct {

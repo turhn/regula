@@ -1,7 +1,9 @@
 package lexer
 
-import "testing"
-import "../token"
+import (
+	"github.com/turhn/regula/interpreter/token"
+	"testing"
+)
 
 func TestLexingMetadataBlocks(t *testing.T) {
 	source := `

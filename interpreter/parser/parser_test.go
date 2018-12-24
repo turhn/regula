@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"../lexer"
+	"github.com/turhn/regula/interpreter/lexer"
 )
 
 func TestParsingMetadataBlocks(t *testing.T) {

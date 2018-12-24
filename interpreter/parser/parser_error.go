@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"../token"
+	"github.com/turhn/regula/interpreter/token"
 )
 
 func (parser *Parser) parserError(currentToken token.Token, message string) {

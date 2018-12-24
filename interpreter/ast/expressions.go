@@ -3,7 +3,7 @@ package ast
 import (
 	"fmt"
 
-	"../token"
+	"github.com/turhn/regula/interpreter/token"
 )
 
 // BinaryExpression ...
