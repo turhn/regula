@@ -2,6 +2,7 @@ package evaluator
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/turhn/regula/interpreter/ast"
 	"github.com/turhn/regula/interpreter/local"
@@ -9,7 +10,6 @@ import (
 )
 
 // Evaluator evaluates the expressions
-// TODO: Make this another package (Preferably a subpackage in evaluator)
 type Evaluator struct {
 	ast.Visitor
 	symbolTable *local.SymbolTable
@@ -73,8 +73,11 @@ func (e *Evaluator) comparisonExpression(comparison *ast.ComparisonExpression) a
 		case *ast.NumberLiteral:
 			result := left.NativeValue().(float64) == right.NativeValue().(float64)
 			return &ast.BooleanLiteral{Value: result}
+		case *ast.StringLiteral:
+			result := left.NativeValue().(string) == right.NativeValue().(string)
+			return &ast.BooleanLiteral{Value: result}
 		default:
-			fmt.Printf("I don't know how to compare a number with %v", right)
+			fmt.Printf("I don't know how to compare a %s with %s", reflect.TypeOf(left), reflect.TypeOf(right))
 			panic("Panik atak")
 		}
 	default:

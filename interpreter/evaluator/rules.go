@@ -9,18 +9,22 @@ import (
 type RulesBlock struct {
 	SymbolTable *local.SymbolTable
 	Rules       []*ast.Rule
+	Data        map[string]string
 }
 
 // EvaluationResult is the resulting object
 type EvaluationResult struct {
-	// Keep this while developing
-	// TODO: Make a more informative output
-	Rule *ast.Rule
+	Rule     *ast.Rule
+	Matching bool
 }
 
-// NewRulesBlock initializes a Rules evalutator
+// NewRulesBlock initializes a Rules evaluator
 func NewRulesBlock(st *local.SymbolTable, rules []*ast.Rule) *RulesBlock {
-	return &RulesBlock{SymbolTable: st, Rules: rules}
+	return &RulesBlock{
+		SymbolTable: st,
+		Rules: rules,
+		Data: make(map[string]string),
+	}
 }
 
 // Evaluate starts the evaluation
@@ -40,16 +44,26 @@ func (rb *RulesBlock) evaluateRule(rule *ast.Rule) *EvaluationResult {
 	evaluator := NewEvaluator(rb.SymbolTable)
 
 	result := evaluator.Visit(rule.RuleExpression)
+	value := result.(*ast.BooleanLiteral)
 
 	// Store evaluation result in the local table
 	// TODO: Make this a compound identifier
 	if rule.Identifier != nil {
-		rb.storeRuleResult(rule.Identifier.String(), result.(*ast.BooleanLiteral))
+		rb.storeRuleResult(rule.Identifier.String(), value)
 	}
 
-	return &EvaluationResult{Rule: rule}
+	ruleResultsMap := EvaluateKeyValuesToMap(rule.Result.Items, rb.SymbolTable)
+	rb.appendToResultData(ruleResultsMap)
+
+	return &EvaluationResult{Rule: rule, Matching: value.Value}
 }
 
 func (rb *RulesBlock) storeRuleResult(name string, value *ast.BooleanLiteral) {
 	rb.SymbolTable.Define(name, value)
+}
+
+func (rb *RulesBlock) appendToResultData(ruleResultMap map[string]string) {
+	for key, val := range ruleResultMap {
+		rb.Data[key] = val
+	}
 }

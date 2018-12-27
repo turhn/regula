@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"fmt"
-	"go/token"
 	"os"
 	"unicode"
 

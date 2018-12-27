@@ -1,8 +1,10 @@
 package parser
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/turhn/regula/interpreter/ast"
 	"github.com/turhn/regula/interpreter/lexer"
@@ -94,12 +96,16 @@ func (parser *Parser) parseRule() *ast.Rule {
 }
 
 func (parser *Parser) parseRuleResult() *ast.RuleResult {
-	parser.level++
-	parser.consumeIndents()
-	// TODO: A loop is needed
 	var result []*ast.KeyValuePair
-	result = append(result, parser.parseKeyValuePair())
-	parser.level--
+
+	for !parser.isAtEnd() && parser.check(token.INDENT) {
+		parser.level++
+		parser.consumeIndents()
+
+		result = append(result, parser.parseKeyValuePair())
+
+		parser.level--
+	}
 
 	return &ast.RuleResult{Items: result}
 }
@@ -262,4 +268,35 @@ func (parser *Parser) isReservedBlock(tokenType token.TokenType) bool {
 	}
 
 	return false
+}
+
+func (parser *Parser) parserError(currentToken token.Token, message string) {
+	source := parser.lexer.Source
+	line := currentToken.Line
+	column := currentToken.Column
+
+	pointer := "^-----"
+
+	scanner := bufio.NewScanner(strings.NewReader(source))
+
+	// Iterate through the error line
+	for i := 1; i <= line; i++ {
+		scanner.Scan()
+	}
+
+	code := scanner.Text()
+
+	// Iterate trough the error column
+	for i := 0; i < column; i++ {
+		pointer = " " + pointer
+	}
+
+	fullMessage := fmt.Sprintf("Parser Error [%d:%d]: %s\n", line, column, message)
+
+	fmt.Println(code)
+	fmt.Println(pointer)
+	fmt.Println(fullMessage)
+	fmt.Printf("Current token is %v\n", currentToken)
+
+	os.Exit(1)
 }

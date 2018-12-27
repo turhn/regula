@@ -14,6 +14,7 @@ import (
 // Runner is program runner
 type Runner struct {
 	Program *ast.Program
+	Result *Result
 }
 
 // New Runner
@@ -26,11 +27,15 @@ func New(source string) *Runner {
 }
 
 // Run the program against a fact
-func (r *Runner) Run(fact string) string {
+func (r *Runner) Run(fact string) *Result {
 	locals := &local.SymbolTable{}
+	programResult := &Result{}
 
 	// Register Fact into the symbol table
 	evaluator.RegisterFact(fact, locals)
+
+	// Metadata block
+	programResult.Metadata = evaluator.EvaluateMetadataToMap(r.Program.Metadata, locals)
 
 	// Definitions Block
 	// Add definitions to the symbol table here
@@ -38,12 +43,25 @@ func (r *Runner) Run(fact string) string {
 	// dumpObject(r.Program, "AST output....")
 
 	// Rule Block
-	rules := r.Program.Rules.Rules
-	ruleBlockEvaluator := evaluator.NewRulesBlock(locals, rules)
-	result := ruleBlockEvaluator.Evaluate()
+	if r.Program.Rules == nil {
+		fmt.Println("No rules found")
+	}
 
+	rules := r.Program.Rules.Rules
+
+	ruleBlockEvaluator := evaluator.NewRulesBlock(locals, rules)
+	ruleTable := ruleBlockEvaluator.Evaluate()
+
+	programResult.RuleTable = ruleTable
+	programResult.Data = ruleBlockEvaluator.Data
+
+	return programResult
+}
+
+// TODO: This is temporary. We need a full AST
+func (r *Runner) Serialize() string {
 	// Convert to JSON string
-	jsonBytes, err := json.Marshal(result)
+	jsonBytes, err := json.Marshal(r.Result)
 
 	if err != nil {
 		fmt.Printf("An error occured while running the application: %v\n", err)

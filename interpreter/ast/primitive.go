@@ -31,7 +31,7 @@ func NewStringLiteral(token token.Token) *StringLiteral {
 			Token:       token,
 			isStatement: false,
 		},
-		Value: token.Lexeme,
+		Value: token.Literal,
 	}
 }
 
